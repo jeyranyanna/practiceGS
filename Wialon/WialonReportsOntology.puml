@@ -1,0 +1,161 @@
+@startuml WialonReportsOntology
+
+title "Онтология 'Отчеты' Wialon"
+
+skinparam hardwritten true
+
+'==========Основые сущности по работе с отчетами Wialon====================
+!$Wialon                    = "Wialon"
+!$Reports                   = "Отчет"
+'-Результат отчета- 
+!$ReportResult              = "Результат отчета"
+'-Параметры очетов-
+!$ReportTemplate            = "Шаблон отчета"
+!$ElementSystem             = "Элемент системы"
+!$Interval                  = "Временной интервал"    
+'-Шаблон отчета- 
+'-Свойства шаблона
+!$templateName              = "Имя шаблона отчета"
+!$resourceTemplate          = "Ресурс шаблона"
+!$typeTemplate              = "Тип шаблона отчета"
+!$listTablesTemplate        = "Список созданных таблиц"
+!$listElementsTemplate      = "Список привязанных элементов"
+    '-Типы отчетов-
+    !$GroupObjectsReport    = "Группа объектов"
+        !$ObjectReport      = "Объект"
+    !$UserReport            = "Пользователь"
+    !$DriverGroupReport     = "Группа водителей"
+        !$DriverReport      = "Водитель"
+    !$ResourceReport        = "Ресурс"
+    !$PassengerGroupReport  = "Группа пассажиров"
+        !$PassengersReport  = "Пассажиры"
+    !$GeofenceGroupReport   = "Группа геозон"
+        !$GeofencesReport   = "Геозоны"
+'-Настройки отчета        
+!$ReportSettings            = "Типы настроек отчета"
+    !$Description           = "Описание отчета"
+    !$General               = "Основное"
+    !$MapOutput             = "Карта"
+    !$Markers               = "Маркеры"
+    !$Address               = "Адресная информация"
+    !$Shifts                = "Смены"
+'-Содержимое шаблона
+!$ReportContent                      = "Содержимое отчета"
+    '-Таблица-
+    !$Table                          = "Таблица"
+        '-Свойства таблицы-
+        !$TableName                  = "Имя таблицы"
+        !$TableType                  = "Тип таблицы"
+        !$TableColumns               = "Столбцы таблицы"
+        '-Настройки таблицы-
+        !$TableSettings              = "Типы настроек таблицы"
+            !$Details                = "Детализация"
+            !$RowNumbering           = "Нумерация строк"
+            !$Total                  = "Итоговая строка"
+            !$TimeLimit              = "Ограничение по времени"
+            !$IncompleteInterval     = "Незавершенный интервал"
+            !$DurationFormat         = "Формат длительности"
+        !$Filters                    = "Фильтры интервалов" 
+    '-Статистика-        
+    !$Statistics                     = "Статистика"
+    '-График-
+    !$Graph                          = "График"
+        !$GraphType                  = "Тип графика"
+            !$SensorMasks            = "Маски датчиков"
+            !$Markers                = "Маркеры"
+            !$Background             = "Фон"
+            !$LineColour             = "Цвет линии"
+
+
+'==========================================================================
+'===========================Основые связи================================== 
+(**$Wialon**)               --> ($Reports)         : "содержит"
+'-Параметры очетов-
+($Reports)                  --> ($ReportTemplate)  : "генерируется на основе"
+($Reports)                  --> ($ElementSystem)   : "привязан к"
+($Reports)                  --> ($Interval)        : "выполняется по"
+'-Результат отчета- 
+($Reports)                  --> ($ReportResult)    : "формирует"
+    ($ReportResult)         --> ($ReportContent)   : "отображает"
+'-Шаблон отчета- 
+'-Свойства шаблона-
+($ReportTemplate)          --> [$templateName]                  : "содержит"
+($ReportTemplate)          --> [$resourceTemplate]              : "содержит"
+($ReportTemplate)          --> [$typeTemplate]                  : "содержит"
+($ReportTemplate)          --> [$listTablesTemplate]            : "содержит"
+($ReportTemplate)          --> [$listElementsTemplate]          : "содержит"
+'-Типы отчетов-
+package "Типы отчетов" {
+    [$typeTemplate]               <|--    ($GroupObjectsReport) : "наследует"
+        ($GroupObjectsReport)     <|--    ($ObjectReport)       : "наследует"
+    [$typeTemplate]               <|--    ($UserReport)         : "наследует"
+    [$typeTemplate]               <|--    ($DriverGroupReport)  : "наследует"
+        ($DriverGroupReport)      <|--    ($DriverReport)       : "наследует"
+    [$typeTemplate]               <|--    ($ResourceReport)     : "наследует"
+    [$typeTemplate]             <|--    ($PassengerGroupReport) : "наследует"
+        ($PassengerGroupReport)   <|--    ($PassengersReport)   : "наследует"
+    [$typeTemplate]               <|--    ($GeofenceGroupReport): "наследует"
+        ($GeofenceGroupReport)    <|--    ($GeofencesReport)    : "наследует"
+}
+
+[$typeTemplate]                   -->    ($ReportContent)      : "определяет"
+[$typeTemplate]                   -->    ($Filters)            : "определяет"
+
+'-Настройки отчета-
+($ReportTemplate)                 -->    ($ReportSettings)     : "содержит"
+package "Настройки отчета" {
+    ($ReportSettings)             <|--   ($Description)        : "наследует"
+    ($ReportSettings)             <|--   ($General)            : "наследует"
+    note bottom of $General
+    Настройка формата даты и времени, 
+    выбор системы мер и т.д.
+    end note
+    ($ReportSettings)             <|--   ($MapOutput)          : "наследует"
+    ($ReportSettings)             <|--   ($Markers)            : "наследует"
+    ($ReportSettings)             <|--   ($Address)            : "наследует"
+    ($ReportSettings)             <|--   ($Shifts)             : "наследует"
+}
+
+'-Содержимое шаблона
+($ReportTemplate)                 --> ($ReportContent)         : "содержит"
+    '-Таблица-
+    ($ReportContent)              --> ($Table)                 : "состоит из"
+        package "Свойства таблицы"{
+            ($Table)              --> [$TableName]             : "содержит"
+            ($Table)              --> [$TableType]             : "содержит"
+            ($Table)              --> [$TableColumns]          : "содержит"
+            [$TableType]          --> ($Filters)               : "определяет"
+        }
+        '-Настройки таблицы-
+        ($Table)                  --> ($TableSettings)         : "содержит"
+            package "Настройки таблицы"{
+            ($TableSettings)     <|-- ($Details)               : "наследует"
+            ($TableSettings)     <|-- ($RowNumbering)          : "наследует"
+            ($TableSettings)     <|-- ($Total)                 : "наследует"
+            ($TableSettings)     <|-- ($TimeLimit)             : "наследует"
+            ($TableSettings)     <|-- ($IncompleteInterval)    : "наследует"
+            ($TableSettings)     <|-- ($DurationFormat)        : "наследует"
+            }
+        ($Table)                  --> ($Filters)               : "содержит"
+    '-Статистика-   
+    ($ReportContent)              --> ($Statistics)            : "состоит из"
+    note on link
+    Статистика - таблица с общей 
+    информацией по отчету.
+    [[https://help.wialon.com/help/lc/ru/user-guide/monitoring-system/reports/report-templates/report-contents/statistics Содержимое статистики]]
+    end note 
+    '-График-
+    ($ReportContent)              --> ($Graph)                 : "состоит из"
+        '-Свойства графика-
+        package "Свойства графика"{
+            ($Graph)              --> [$GraphType]             : "содержит"
+            note right
+            [[https://jira-dev.7gis.ru/conf/x/UQagTw Типы графиков]]
+            end note 
+            ($Graph)              --> [$SensorMasks]           : "содержит"
+            ($Graph)              --> [$Markers]               : "содержит"
+            ($Graph)              --> [$Background]            : "содержит"
+            ($Graph)              --> [$LineColour]            : "содержит"
+        }
+
+@enduml
