@@ -1,0 +1,174 @@
+@startuml GeoTab_UseCaseDiagram
+title Диаграмма прецедентов GeoTab Карта
+
+left to right direction
+'===Акторы===========================================
+actor "Пользователь"    as user
+
+'===Отношения========================================
+!$include       = "Включает"
+!$extend        = "Расширяет"
+!$may           = "Может"
+
+
+'==Прецеденты=========================================
+'-=Вкладка карта=-
+!$OpenMapPage                           = "Перейти на вкладку <<Карта>>"
+    '-Просмотр карты-
+    !$viewMap                           = "Посмотреть карту"
+        !$useCluster                    = "Использовать кластерный вид карты"
+        !$chooseAssets                  = "Выбрать активы для просмотра"
+        !$updateList                    = "Установить флажок <<Обновлять список при перемещении карты>>"
+        !$zoomToYourCurrentLocation     = "Увеличить текущее местоположение"
+        '-Создание и просмотр маршрутов-     
+        !$mapSettings                       = "Открыть параметры карты"
+            !$chooseProvider                = "Выбрать один из доступных поставщиков карты"
+            !$goRoutesPage                  = "Перейти на страницу маршрутов"
+                !$viewRoutes                = "Посмотреть маршрут на карте"
+                !$addRoute                  = "Создать маршрут"
+    '-Использование боковой панели-
+    !$useSideMenu                       = "Использовать боковую панель"     
+        !$viewAdditionalInfoAboutAsset  = "Посмотреть дополнительную информацию об активе"
+        !$viewInfoAboutDriver           = "Посмотреть контакнтую информацию о текущем водителе"
+    '-Взаимодействие с активами на карте-
+    !$interactWithAssets                = "Выбрать актив на карте"
+        !$editAsset                     = "Редактировать актив"
+        !$viewtrip                      = "Посмотреть поездку"
+        !$assignDriver                  = "Назначить нового водителя"
+        !$showRoute                     = "Посмотреть маршрут, назначенный активу"
+    '-Взаимодействие с дорогами на карте-
+    !$interactWithRoads                 = "Выбрать дорогу на карте"
+        !$dispatchVehicleHere           = "Направить сюда актив"
+        !$updatePostedLoadSpeed         = "Изменить скорость движения на дороге"
+        !$AddZoneHere                   = "Создать зону в этом месте"
+        !$FindAddress                   = "Посмотреть адрес объекта"
+        '-Изучение активности в выбранной зоне-
+        !$InputDate                     = "Ввести дату и временной диапазон"
+            !$viewAreaActivity          = "Посмотреть активность в выбранной зоне за определенный период"
+    '-Взаимодействие с активами и дорогами на карте-
+        !$showStreetView                = "Посмотреть вид улицы в Google StreetView"
+        !$roadSpeedDetail               = "Посмотреть текущую скорость движения"
+        '-Навигация: построение маршрута-
+        !$navigateToAsset               = "Выбрать навигацию к активу"
+        !$navigateToZone                = "Выбрать навигацию к зоне"
+        !$navigateToHere                = "Выбрать навигацию к точке на карте"
+            !$openProviderMap           = "Перейти в выбранное картографическое приложение"
+                !$viewRoute             = "Посмотреть построенный маршрут"
+        '-Поиск ближайших активов-
+        !$useNearestAssetsTechnology    = "Выбрать показ ближайших к этому месту активов"
+        !$GoZone                        = "Перейти в область, где находится < 500 объектов"
+        !$ChangeScale                   = "Изменить масштаб"
+            !$FindNearestAssets         = "Выполнить поиск ближайших к выбранному объекту активов"
+    '-Поиск объекта/объектов-        
+    !$findObject                        = "Выполнить поиск объекта на карте"
+    !$findObjects                       = "Выполнить поиск объектов на карте" 
+    '-Фильтрация активов- 
+    !$chooseGroups                      = "Выбрать группы"  
+        !$filterGroups                  = "Отфильтровать активы на карте в соответствии с выбранными группами"
+    '-Сохранение текущего представления карты- 
+    !$openToolbar                       = "Открыть панель инструментов" 
+        !$saveCurrentMap                = "Сохранить текущий вид карты" 
+            !$saveCurrentMapArea        = "Сохранить область просмотра карты" 
+            !$saveCurrentMapSettings    = "Сохранить все настройки карты" 
+        !$lockThisView                  = "Заблокировать текущий вид карты"
+        !$viewSavedMapViews             = "Посмотреть сохраненные виды карты" 
+        !$showSavedMapView              = "Отобразить сохраненный вид карты"
+'-=Вкладка администрирование=-            
+!$OpenAdministrationPage                = "Перейти в раздел <<Администрирование>>"
+    !$CreateUserMap                     = "CRUDX пользовательская веб-карта"
+        !$OpenSystemSettingsPage        = "Открыть системные настройки"
+            !$LoadUserMap               = "Выбрать для использования пользовательскую карту"
+
+
+
+
+
+
+'=======================================
+'===Связи===============================================================
+'=======================================
+rectangle "Fleet Management Application"{
+    '-=Вкладка карта=-
+    :user:                                --> ($OpenMapPage)                    : $may
+        '-Просмотр карты-
+        ($OpenMapPage)                    ..> ($viewMap)                        : $include
+            ($viewMap)                    <.. ($useCluster)                     : $extend
+            note right: Для одновременного просмотра до 10 000 объектов
+            ($viewMap)                    ..> ($chooseAssets)                   : $include
+            ($viewMap)                    ..> ($updateList)                     : $include
+            ($viewMap)                    ..> ($zoomToYourCurrentLocation)      : $include
+            '-Создание и просмотр маршрутов-  
+            ($viewMap)                    ..> ($mapSettings)                    : $include
+            ($mapSettings)                ..> ($chooseProvider)                 : $include 
+            ($mapSettings)                ..> ($goRoutesPage)                   : $include
+                ($goRoutesPage)           ..> ($viewRoutes)                     : $include 
+                ($goRoutesPage)           ..> ($addRoute)                       : $include
+        '-Использование боковой панели-
+        ($OpenMapPage)                    ..> ($useSideMenu)                    : $include
+            ($useSideMenu)                ..> ($viewAdditionalInfoAboutAsset)   : $include
+            ($useSideMenu)                ..> ($viewInfoAboutDriver)            : $include
+        '-Взаимодействие с активами на карте-  
+        ($OpenMapPage)                ..> ($interactWithAssets)             : $include
+            ($interactWithAssets)     ..> ($editAsset)                      : $include
+            ($interactWithAssets)     ..> ($viewtrip)                       : $include
+            ($interactWithAssets)     ..> ($assignDriver)                   : $include
+            ($interactWithAssets)     ..> ($showRoute)                      : $include
+        '-Взаимодействие с дорогами на карте-  
+        ($OpenMapPage)                ..> ($interactWithRoads)              : $include
+            ($interactWithRoads)      ..> ($dispatchVehicleHere)            : $include
+            ($interactWithRoads)      ..> ($updatePostedLoadSpeed)          : $include
+            ($interactWithRoads)      ..> ($AddZoneHere)                    : $include
+            ($interactWithRoads)      ..> ($FindAddress)                    : $include
+            ($interactWithRoads)      ..> ($InputDate)                      : $include
+                ($InputDate)          ..> ($viewAreaActivity)               : $include
+            '-Взаимодействие с активами и дорогами на карте-
+            package "Google StreetView"{
+                ($interactWithAssets)     ..> ($showStreetView)                 : $include
+                ($interactWithRoads)      ..> ($showStreetView)                 : $include
+            }   
+                ($interactWithAssets)     ..> ($roadSpeedDetail)                : $include
+                ($interactWithRoads)      ..> ($roadSpeedDetail)                : $include
+                '-Навигация: построение маршрута-
+                ($interactWithAssets)     ..> ($navigateToAsset)                : $include
+                ($interactWithAssets)     ..> ($navigateToZone)                 : $include
+                ($interactWithAssets)     ..> ($navigateToHere)                 : $include
+                ($interactWithRoads)      ..> ($navigateToAsset)                : $include
+                package "Картографическое приложение"{
+                    ($navigateToAsset)    ..> ($openProviderMap)                : $include
+                    ($interactWithRoads)      ..> ($navigateToZone)                 : $include
+                        ($navigateToZone)     ..> ($openProviderMap)                : $include
+                    ($interactWithRoads)      ..> ($navigateToHere)                 : $include
+                        ($navigateToHere)     ..> ($openProviderMap)                : $include
+                            ($openProviderMap)..> ($viewRoute)                      : $include        
+                }
+                '-Поиск ближайших активов-
+                ($interactWithAssets)     ..> ($useNearestAssetsTechnology)     : $include
+                ($interactWithRoads)      ..> ($useNearestAssetsTechnology)     : $include
+                note right: Технология <<Nearest assets>>  для поиска до 50 ближайших активов
+                ($useNearestAssetsTechnology) ..> ($GoZone)                         : $include
+                    ($GoZone)                 ..> ($FindNearestAssets)              : $include
+                ($useNearestAssetsTechnology) ..> ($ChangeScale)                    : $include 
+                    ($ChangeScale)            ..> ($FindNearestAssets)              : $include
+        '-Поиск объекта/объектов-            
+        ($OpenMapPage)                    ..> ($findObject)                     : $include   
+        ($OpenMapPage)                    ..> ($findObjects)                    : $include  
+        '-Фильтрация активов-
+        ($OpenMapPage)                    ..> ($chooseGroups)                   : $include
+            ($chooseGroups)               ..> ($filterGroups)                   : $include
+            note right: Окрашивание отображаемых активов в цвет группы, с которой актив связан
+        '-Сохранение текущего представления карты- 
+        ($OpenMapPage)                    ..> ($openToolbar)                    : $include
+            ($openToolbar)                ..> ($saveCurrentMap)                 : $include
+                ($saveCurrentMap)         ..> ($saveCurrentMapArea)             : $include
+                ($saveCurrentMap)         ..> ($saveCurrentMapSettings)         : $include
+            ($openToolbar)                ..> ($lockThisView)                   : $include 
+            note right: Текущий вид карты не будет меняться при автообновлении
+            ($openToolbar)                ..> ($viewSavedMapViews)              : $include 
+'-=Вкладка администрирование=-  
+    :user:                                --> ($OpenAdministrationPage)         : $may
+        ($OpenAdministrationPage)         ..> ($CreateUserMap)                  : $include  
+            ($CreateUserMap)              ..> ($OpenSystemSettingsPage)         : $include 
+                ($OpenSystemSettingsPage) ..> ($LoadUserMap)                    : $include 
+}           
+
+@enduml

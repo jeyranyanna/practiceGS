@@ -1,0 +1,177 @@
+@startuml GeoTab_UseCaseDiagram
+title Диаграмма прецедентов GeoTab Поездки и зоны
+left to right direction
+
+
+'===Акторы===========================================
+actor "Пользователь"    as user
+actor "Админ"           as admin
+
+'===Отношения========================================
+!$include       = "Включает"
+!$extend        = "Расширяет"
+!$may           = "Может"
+
+'==Прецеденты========================================
+!$goMapPage                                      = "Перейти на страницу <<Карта>>"
+    '-Поездки-
+    !$goTripsHistoryPage                         = "Перейти на страницу <<История поездок>>"
+        !$readTripInformation                    = "Посмотреть информацию о поездках"
+            !$selectSpecificTrip                 = "Выбрать конкретную поездку"
+                !$readTripOnMap                  = "Посмотреть поездку на карте"
+                !$changeDeviceInformation        = "Изменить информацию о телематическом устройстве"
+                !$assignDriver                   = "Назначить водителя"
+                !$readSpeedProfileReport         = "Посмотреть отчет <<Профиль скорости>> для этой поездки"
+                !$readLogDataAndCollisionsReport = "Посмотреть отчет <<Журнал данных и коллизий>> для этой поездки"
+                !$readExceptions                 = "Посмотреть исключения, произошедшие во время поездки"
+        !$goSettingsPage                         = "Перейти в <<Параметры>>"
+            !$selectSimultaneousViewing          = "Включить одновременный просмотр предыдущей и текущей поездки актива"
+            !$includeHistoricalData              = "Включить отображение исторических данных"
+            !$excludeStops                       = "Исключить отображение остановок"
+            !$categorizeTrips                    = "Выполнить категоризацию поездок на деловые, личные и без категории"
+        !$readReplay                             = "Посмотреть на карте анимированную историю завершенной поездки"
+            !$chooseActives                      = "Выбрать активы"
+            !$chooseActives2                     = "Выбрать активы"
+            !$chooseTrips                        = "Выбрать поездки, необходимые для просмотра"
+            !$changeSpeed                        = "Изменить скорость воспроизведения"
+            !$jumpToDesiredTripSection           = "Перейти к нужному отрезку поездки"
+        !$readTripsSummary                       = "Посмотреть сводку поездок по всему автопарку"
+        !$sortResults                            = "Выполнить сортировку поездок"
+    '-Добавление зоны посредством карты-
+    !$selectArea                                = "Выбрать на карте область"
+'-Зоны-
+!$goZonesPage                                   = "Перейти на страницу <<Зоны>>"
+    !$readZones                                 = "Посмотреть список зон"
+    !$createZone                                = "Создать новую зону"
+        !$customizeZonesSettings                = "Настроить параметры отображения новых зон"
+            !$publishZone                       = "Добавить зону в группу"
+            !$makeZoneVisible                   = "Сделать зону видимой на карте"
+            !$assignZoneType                    = "Присвоить зоне тип"
+    !$importZones                               = "Импортировать список зон из электронной таблицы в свою учетную запись"
+    !$editZone                                  = "Изменить зону"
+    !$goMapViewPage                             = "Перейти на вкладку <<Вид карты>>"
+        !$changeZoneShape                       = "Изменить форму зоны"
+        !$changeZoneColor                       = "Изменить цвет зоны"
+    !$deleteZone                                = "Удалить зону"
+    '-Диспетчеризация зон к активам-
+    !$dispatchZonesToAssets                     = "Выполнить диспетчеризацию зон к активам"
+        !$chooseZone                            = "Выбрать зону"
+        !$chooseAssets                          = "Выбрать активы"
+        !$sendMessageToDrivers                  = "Отправить водителям текстовое сообщение с инструкцией"
+    '-Отчет Посещения зон-
+    !$goZoneVisitsPage                          = "Перейти на вкладку <<Посещения зон>>"
+        !$chooseActives                         = "Выбрать нужные для просмотра активы"
+        !$chooseZoneType                        = "Выбрать тип зоны"
+            !$readZoneVisitsPage                = "Посмотреть отчет <<Посещения зон>>"
+
+'-Использование персонального режима поездки-
+'-Включить персональный режим, используя надстройку Маркетплейс-
+!$goMarketplaceAddIn                            = "Перейти в раздел <<Маркетплейс>>"
+    !$installPersonalModeAddIn                  = "Установить дополнение <<Персональный режим>>"
+!$goAssetsPage                                  = "Перейти в раздел <<Активы>>"
+    !$chooseAsset                               = "Выбрать актив"
+    !$enablePersonalMode                        = "Назначить активу персональный режим"
+'-Включить персональный режим, используя правила исключений-
+!$goRulesGroups                                 = "Перейти в раздел <<Правила & Группы>>"
+    !$goRulesPage                               = "Перейти на страницу <<Правила>>"
+        !$createExceptionRule                   = "Создать новое правило исключений"
+            !$goNotificationsPage               = "Перейти на вкладку <<Уведомления>>"
+'-Очистка данных-
+!$goSystemPage                                  = "Перейти на страницу <<Система>>"
+    !$goSystemSettingsPage                      = "Перейти в раздел <<Настройки Системы>>"
+        !$enablePurgeFunction                   = "Включить функцию очистки данных"
+        !$addPurgeSchedule                      = "Создать расписание очистки данных"
+
+
+
+'=======================================
+'===Связи===============================================================
+'=======================================
+'==Акторы==
+user <|-- admin
+
+
+'==Прецеденты==
+rectangle "Fleet Management Application"{
+    '-=Страница Карта=-
+    :user:                                      --> ($goMapPage)                        : $may
+        '-Поездки-
+        ($goMapPage)                            ..> ($goTripsHistoryPage)               : $include
+            ($goTripsHistoryPage)               ..> ($readTripInformation)              : $include
+                ($readTripInformation)          ..> ($selectSpecificTrip)               : $include
+                    ($selectSpecificTrip)       ..> ($readTripOnMap)                    : $include
+                    ($selectSpecificTrip)       ..> ($changeDeviceInformation)          : $include
+                    ($selectSpecificTrip)       ..> ($assignDriver)                     : $include
+                    ($selectSpecificTrip)       ..> ($readSpeedProfileReport)           : $include
+                    ($selectSpecificTrip)       ..> ($readLogDataAndCollisionsReport)   : $include
+                    ($selectSpecificTrip)       ..> ($readExceptions)                   : $include
+                ($readTripInformation)          <.. ($sortResults)                      : $extend
+            ($goTripsHistoryPage)               ..> ($goSettingsPage)                   : $include
+                ($goSettingsPage)               ..> ($selectSimultaneousViewing)        : $include
+                ($goSettingsPage)               ..> ($includeHistoricalData)            : $include
+                ($goSettingsPage)               ..> ($excludeStops)                     : $include
+                ($goSettingsPage)               ..> ($categorizeTrips)                  : $include
+            ($goTripsHistoryPage)               ..> ($readReplay)                       : $include
+                ($readReplay)                   ..> ($chooseActives)                    : $include
+                ($readReplay)                   ..> ($chooseTrips)                      : $include
+                ($readReplay)                   <.. ($changeSpeed)                      : $extend
+                ($readReplay)                   <.. ($jumpToDesiredTripSection)         : $extend
+            ($goTripsHistoryPage)               ..> ($readTripsSummary)                 : $include
+            
+        '-Добавление зоны посредством карты-
+        ($goMapPage)                            ..> ($selectArea)                       : $include
+            ($selectArea)                       ..> ($createZone)                       : $include
+    '-Зоны-
+    :user:                                      --> ($goZonesPage)                      : $may
+        ($goZonesPage)                          ..> ($readZones)                        : $include
+        ($goZonesPage)                          ..> ($createZone)                       : $include
+            ($createZone)                       <.. ($customizeZonesSettings)           : $extend
+                ($customizeZonesSettings)       ..> ($publishZone)                      : $include
+                ($customizeZonesSettings)       ..> ($makeZoneVisible)                  : $include
+                ($customizeZonesSettings)       ..> ($assignZoneType)                   : $include
+
+        ($goZonesPage)                          ..> ($importZones)                      : $include
+            ($importZones)                      <.. ($customizeZonesSettings)           : $extend
+        ($goZonesPage)                          ..> ($editZone)                         : $include
+        ($goZonesPage)                          ..> ($goMapViewPage)                    : $include
+        note right: На панели отобразится вид зоны на карте
+            ($goMapViewPage)                    ..> ($changeZoneShape)                  : $include
+            ($goMapViewPage)                    ..> ($changeZoneColor)                  : $include
+            'добавить расширение к настройке параметров зоны 
+        ($goZonesPage)                          ..> ($deleteZone)                       : $include
+        '-Диспетчеризация зон к активам-
+        ($goZonesPage)                          ..> ($dispatchZonesToAssets)            : $include
+            ($dispatchZonesToAssets)            ..> ($chooseZone)                       : $include
+            ($dispatchZonesToAssets)            ..> ($chooseAssets)                     : $include
+            ($dispatchZonesToAssets)            ..> ($sendMessageToDrivers)             : $include
+        '-Отчет Посещения зон-
+        ($goZonesPage)                          ..> ($goZoneVisitsPage)                 : $include
+            ($goZoneVisitsPage)                 ..> ($chooseActives2)                   : $include
+            ($goZoneVisitsPage)                 ..> ($chooseZoneType)                   : $include
+                ($chooseActives2)               ..> ($readZoneVisitsPage)               : $include
+                ($chooseZoneType)               ..> ($readZoneVisitsPage)               : $include
+                    ($readZoneVisitsPage)       ..> ($goTripsHistoryPage)               : $include
+    '-Использование персонального режима поездки-
+    rectangle "Использование персонального режима поездки"{
+        '-Включить персональный режим, используя надстройку Маркетплейс-
+        package "Надстройка Маркетплейс"{
+        :admin:                                 --> ($goMarketplaceAddIn)               : $may
+        ($goMarketplaceAddIn)                   ..> ($installPersonalModeAddIn)         : $include
+        }
+        :admin:                                 --> ($goAssetsPage)                     : $may
+            ($goAssetsPage)                     ..> ($chooseAsset)                      : $include
+                ($chooseAsset)                  ..> ($enablePersonalMode)               : $include  
+        '-Включить персональный режим, используя правила исключений-
+        :admin:                                 --> ($goRulesGroups)                    : $may
+            ($goRulesGroups)                    ..> ($goRulesPage)                      : $include
+                ($goRulesPage)                  ..> ($createExceptionRule)              : $include
+                    ($createExceptionRule)      ..> ($goNotificationsPage)              : $include
+                        ($goNotificationsPage)  ..> ($enablePersonalMode)               : $include
+        '-Очистка данных-
+        :admin:                                 --> ($goSystemPage)                     : $may
+            ($goSystemPage)                     ..> ($goSystemSettingsPage)             : $include
+                ($goSystemSettingsPage)         ..> ($enablePurgeFunction)              : $include  
+                note right: В некоторых ситуациях может потребоваться очистка данных, зарегистрированных в персональном режиме
+                ($goSystemSettingsPage)         ..> ($addPurgeSchedule)                 : $include  
+    }
+}

@@ -1,0 +1,265 @@
+@startuml GeoTab_UseCaseDiagram
+title Диаграмма прецедентов GeoTab События
+
+
+'===Акторы===========================================
+actor "Пользователь"    as user
+actor "Партнер"         as partner
+actor "Водитель"        as driver
+
+'===Отношения========================================
+!$include       = "Включает"
+!$extend        = "Расширяет"
+!$may           = "Может"
+
+'==Прецеденты========================================
+!$goRulesGroups                                 = "Перейти в раздел <<Правила & Группы>>"
+
+!$goRulesPage                                   = "Перейти на страницу <<Правила>>"
+    '-Добавление нового правила исключений-
+    !$createExceptionRule                       = "Создать новое правило исключений"
+            !$chooseGroups                      = "Выбрать группы, к которым будет применяться правило"
+            !$chooseConditions                  = "Выбрать условия срабатывания правила исключения"
+            '-Добавление уведомления-
+            !$goNotificationsPage               = "Перейти на вкладку <<Уведомления>>"
+                '-Добавление почтового уведомления-
+                !$chooseEmailNotification       = "Создать почтовое уведомление>"
+                    !$chooseTemplateToNotify    = "Выбрать шаблон уведомления"
+                    !$createTemplateToNotify    = "Создать шаблон уведомления"
+                        !$chooseRecipients      = "Добавить получателей уведомления"
+                '-Добавление предупреждений-       
+                !$chooseAlert                   = "Создать предупреждение в приложении DriveApp"
+                    !$chooseAlertType           = "Выбрать тип предупреждения"
+                '-Добавление оповещения водителя пакет Телематическое устройство- 
+                !$chooseDriverFeedback          = "Создать звуковое оповещение с телематического устройства"
+                    !$allowLateNotifications    = "Вкл/выкл опцию <<Разрешить поздние уведомления>>"
+                    !$selectTypeOfTrigger       = "Выбрать вид оповещения водителя"
+                '-Добавление другого типа уведомления (например, смс)- 
+                !$chooseOtherAlertType          = "Создать другой тип уведомлений"
+                    
+    '-CRUD правила исключений-
+    !$removeExceptionRule                       = "Удалить правило исключений"
+    !$updateExceptionRule                       = "Изменить правило исключений"
+        !$removeNotification                    = "Удалить уведомление"
+    !$readExceptionRule                         = "Посмотреть правило исключений"
+    
+
+    '-CRUD шаблонов уведомлений-
+    'Пример пользовательского шаблона: предоставление веб-ссылки на карту с указанием маршрута до станции техобслуживания при обнаружении неисправности двигателя.
+    !$goNotificationTemplatesPage               = "Перейти на страницу <<Шаблоны уведомлений>>"
+        !$crudNotificationTemplates             = "CRUD шаблоны уведомлений"
+    
+
+    '-Повторная обработка данных-
+    !$goReprocessingDataPage                    = "Перейти в раздел <<Повторная обработка данных>>"
+        !$chooseData                            = "Выбрать дату начала периода, активы, правила"
+            !$executeReprocessingFunction       = "Выполнить расчет исключений для введенных данных"
+
+
+    '-Настройка списка рассылки-
+    !$createDistributionList                    = "Создать список рассылки"
+        !$goMore                                = "Перейти на вкладку <<Подробнее>>"
+            !$assignToGroup                     = "Назначить актив определенной группе"
+            !$emailToGroup                      = "Отправить письма участникам группы"
+            !$assignAsPersonalOrBusiness        = "Перевести автомобиль в личный режим или в бизнес режим"
+
+    '-Исключения-
+    !$goExceptionsPage                              = "Перейти на страницу <<Исключения>>"
+        !$chooseTimePeriod                          = "Выбрать период времени"
+            !$readSummaryOfExceptionsRules          = "Посмотреть сводку всех нарушений правил исключений за период"
+                !$changeParameters                  = "Настроить параметры сводки нарушений"
+                    !$filterReport                  = "Отфильтровать отчет по определенным правилам исключений"
+                    !$readDismissedEvents           = "Включить отображение отклоненных событий"
+                !$chooseSortOrder                   = "Отстортировать список исключений"
+                !$findExceptions                    = "Выполнить поиск исключений"
+        !$chooseExceptionRule                       = "Выбрать правило исключения"
+            !$readAssets                            = "Посмотреть активы, нарушившие это правило"
+            !$goAsset                               = "Перейти по конкретному активу, нарушившему это правило"
+                !$readAssetInfo                     = "Посмотреть дополнительную информацию об активе"
+                !$readEngineProfile                 = "Посмотреть страницу профиля данных двигателя для этого актива и события"
+                !$readTrip                          = "Посмотреть поездку, во время которой произошло событие"
+        '-Отчеты и визуализация-
+        !$openReports                               = "Посмотреть доступные варианты отчетов"
+            !$chooseReport                          = "Выбрать вариант отчета"
+                !$loadCopyExcel                     = "Загрузить копию отчета в формате Microsoft Excel"
+                !$loadCopyPdf                       = "Загрузить копию отчета в формате PDF"
+                !$openCopyBrowser                   = "Отобразить отчет в веб-браузере"
+        !$openPolarAreaChart                        = "Открыть график с отображением исключений"
+        !$goTripsHistoryPage                        = "Перейти на страницу истории поездок"
+            !$readTrip                              = "Посмотреть поездку, вызвавшую исключение"
+
+
+'=-Вспомогательные правила-=
+'-Создание вспомогательной группы-
+!$goGroupsPage                                  = "Перейти на страницу <<Группы>>"
+    !$createAuxiliaryGroup                      = "Создать новую группу с названием <<Вспомогательные>>"
+        !$createAuxiliarySubgroup               = "Создать подгруппу в группе <<Вспомогательные>>"
+
+'-Добавление нового вспомогательного правила-
+!$createAuxiliaryRule = "Создать вспомогательное правило"
+
+
+'-Применение вспомогательных правил к активам-
+!$goAssetsPage                                  = "Перейти в раздел <<Активы>>"
+    !$chooseAssets                              = "Выбрать активы"
+        !$performAuxiliaryRules                 = "Назначить вспомогательные правила к выбранным активам"
+
+'-Настройка звуковых оповещений-
+    !$goAudioFeedbackPage                       = "Перейти на вкладку <<Звуковые оповещения>>"
+        !$createAudioFeedback                   = "Создать оповещения на ряд событий"
+        !$setDurationAudioFeedback              = "Настроить продолжительность оповещения"
+
+
+'-Доступ пользователей-
+!$goAdministrationPage                          = "Перейти в раздел <<Администрирование>>"
+    !$goUserSettingsPage                        = "Перейти на страницу редактирования пользователя"
+        !$provideAccessRights                   = "Предоставить пользователю права доступа к вспомогательной группе"
+
+
+'-Обмен сообщениями (DriveApp)-
+!$goMessagesPage                                    = "Перейти на страницу <<Сообщения>>"
+    !$readAlerts                                    = "Посмотреть полученные предупреждения"
+        !$hearVoiceAlerts                           = "Послушать текст предупреждения, преобразованный в речь"
+    !$answerAlerts                                  = "Ответить на предупреждение"
+    !$goNotificationPageInDriveApp                  = "Перейти в раздел <<Мои уведомления>>"
+        !$readUnseenNotifications                   = "Посмотреть непрочитанные уведомления"
+        !$findNotifications                         = "Выполнить поиск уведомлений"
+
+
+'=======================================
+'===Связи===============================================================
+'=======================================
+left to right direction
+'==Акторы==
+user <|-- partner
+user <|-- driver
+
+'=======================Прецеденты======================================
+rectangle "Fleet Management Application"{
+    :user:                                          --> ($goRulesGroups)                        : $may
+    ($goRulesGroups)                                --> ($goRulesPage)                          : $may
+    '-Добавление нового правила исключений-
+        ($goRulesPage)                              ..> ($createExceptionRule)                  : $include
+
+            ($createExceptionRule)                  ..> ($chooseGroups)                         : $include
+            ($createExceptionRule)                  ..> ($chooseConditions)                     : $include
+            '-Добавление уведомления-
+            ($createExceptionRule)                  ..> ($goNotificationsPage)                  : $include
+                '-Добавление почтового уведомления-
+                ($goNotificationsPage)              ..> ($chooseEmailNotification)              : $include
+                    ($chooseEmailNotification)      ..> ($chooseTemplateToNotify)               : $include
+                    ($chooseEmailNotification)      ..> ($createTemplateToNotify)               : $include
+                        ($chooseTemplateToNotify)   ..> ($chooseRecipients)                     : $include
+                        ($createTemplateToNotify)   ..> ($chooseRecipients)                     : $include
+                '-Добавление уведомления в виде всплывающего окна-
+                ($goNotificationsPage)              ..> ($chooseAlert)                          : $include
+                    ($chooseAlert)                  ..> ($chooseAlertType)                      : $include
+                    note right: всплывающее/срочное встплывающее/оповещение в журнале событий
+                    ($chooseAlert)                  ..> ($chooseTemplateToNotify)               : $include
+                    ($chooseAlert)                  ..> ($chooseRecipients)                     : $include
+                '-Добавление звукового оповещения-
+                ($goNotificationsPage)              ..> ($chooseDriverFeedback)                 : $include
+                    ($chooseDriverFeedback)         ..> ($allowLateNotifications)               : $include
+                    note right: Поздние уведомления отправляются на актив, даже если исключение прошло
+                    ($chooseDriverFeedback)         ..> ($selectTypeOfTrigger)                  : $include
+                    note right: Через серию звуковых сигналов или через стороннее устройство   
+                         ($selectTypeOfTrigger)     ..> ($chooseRecipients)                     : $include 
+                '-Добавление другого типа уведомления (например, смс)- 
+                package "Сторонние системы" {
+                    ($goNotificationsPage)          ..> ($chooseOtherAlertType)                 : $include 
+                } 
+                                
+     
+    '-Удаление, чтение, редактирование правил исключений-
+    ($goRulesPage)                                  ..> ($updateExceptionRule)                  : $include
+        ($updateExceptionRule)                      ..> ($removeNotification)                   : $include
+        ($updateExceptionRule)                      ..> ($goNotificationsPage)                  : $include
+    ($goRulesPage)                                  ..> ($removeExceptionRule)                  : $include
+    ($goRulesPage)                                  ..> ($readExceptionRule)                    : $include
+
+    '-CRUD шаблона уведомления-
+    ($goRulesPage)                                  ..> ($goNotificationTemplatesPage)          : $include
+        ($goNotificationTemplatesPage)              ..> ($crudNotificationTemplates)            : $include
+            ($crudNotificationTemplates)            ..> ($chooseTemplateToNotify)               : $extend
+
+
+    '-Повторная обработка данных
+    ($goRulesPage)                              ..> ($goReprocessingDataPage)                   : $include
+        ($goReprocessingDataPage)               ..> ($executeReprocessingFunction)              : $include
+            ($executeReprocessingFunction)      ..> ($chooseData)                               : $include
+
+
+    '-Настройка списка рассылки-
+    ($goRulesPage)                              ..> ($createDistributionList)                   : $include
+        ($createDistributionList)               ..> ($goNotificationsPage)                      : $include
+        ($createDistributionList)               ..> ($goMore)                                   : $include
+            ($goMore)                           ..> ($assignToGroup)                            : $include
+            ($goMore)                           ..> ($emailToGroup)                             : $include
+            ($goMore)                           ..> ($assignAsPersonalOrBusiness)               : $include
+    ($createDistributionList)                   ..> ($chooseRecipients)                         : $extend
+
+
+    '-Исключения-
+    ($goRulesGroups)                            --> ($goExceptionsPage)                         : $may
+        ($goExceptionsPage)                     ..> ($chooseTimePeriod)                         : $include
+            ($chooseTimePeriod)                 ..> ($readSummaryOfExceptionsRules)             : $include
+                ($readSummaryOfExceptionsRules) ..> ($changeParameters)                         : $include
+                    ($changeParameters)         ..> ($filterReport)                             : $include
+                    ($changeParameters)         ..> ($readDismissedEvents)                      : $include
+                ($readSummaryOfExceptionsRules) ..> ($chooseSortOrder)                          : $include
+                ($readSummaryOfExceptionsRules) ..> ($findExceptions)                           : $include
+        ($goExceptionsPage)                     ..> ($chooseExceptionRule)                      : $include
+            ($chooseExceptionRule)              ..> ($readAssets)                               : $include
+            ($chooseExceptionRule)              ..> ($goAsset)                                  : $include
+                ($goAsset)                      ..> ($readAssetInfo)                            : $include
+                ($goAsset)                      ..> ($readEngineProfile)                        : $include
+                ($goAsset)                      ..> ($readTrip)                                 : $include
+        '-Отчеты и визуализация-
+        ($chooseTimePeriod)                     ..> ($openReports)                              : $include
+        ($chooseExceptionRule)                  ..> ($openReports)                              : $include
+            ($openReports)                      ..> ($chooseReport)                             : $include
+                ($chooseReport)                 ..> ($loadCopyExcel)                            : $include
+                ($chooseReport)                 ..> ($loadCopyPdf)                              : $include
+                ($chooseReport)                 ..> ($openCopyBrowser)                          : $include
+                ($chooseReport)                 ..> ($openPolarAreaChart)                       : $include
+                ($chooseReport)                 ..> ($goTripsHistoryPage)                       : $include
+                    ($goTripsHistoryPage)       ..> ($readTrip)                                 : $include
+
+
+    '-Вспомогательные правила-
+    ($goRulesGroups)                            --> ($goGroupsPage)                             : $may
+        '-Добавление вспомогательной группы-
+            ($goGroupsPage)                     ..> ($createAuxiliaryGroup)                     : $include
+                ($createAuxiliaryGroup)         ..> ($createAuxiliarySubgroup)                  : $include
+        '-Добавление нового вспомогательного правила-
+        ($goRulesPage)                          ..> ($createAuxiliaryRule)                      : $include     
+            note right
+            Вспомогательные правила - это правила исключений, 
+            которые помогают управлять датчиками и внешними устройствами ввода, 
+            подключенными к телематическому устройству
+            end note
+        ($createExceptionRule)                  <.. ($createAuxiliaryRule)                      : $extend
+    '-Применение вспомогательных правил к активам-
+    :user:                                      --> ($goAssetsPage)                             : $may
+        ($goAssetsPage)                         ..> ($chooseAssets)                             : $include
+            ($chooseAssets)                     ..> ($performAuxiliaryRules)                    : $include
+            ($performAuxiliaryRules)            <.. ($createAuxiliaryRule)                      : $extend
+    'Доступ пользователей к конкретной вспомогательной группе-
+    :partner:                                   --> ($goAdministrationPage)                     : $may
+        ($goAdministrationPage)                 ..> ($goUserSettingsPage)                       : $include
+            ($goUserSettingsPage)               ..> ($provideAccessRights)                      : $include
+            ($createAuxiliaryGroup)             <.. ($provideAccessRights)                      : $extend
+            ($performAuxiliaryRules)            <.. ($provideAccessRights)                      : $extend
+}
+
+
+'-Обмен сообщениями в приложении DriveApp-
+package "Приложение DriveApp"{
+    :driver:                                    --> ($goMessagesPage)                           : $may
+    ($goMessagesPage)                           ..> ($readAlerts)                               : $include
+        ($readAlerts)                           <.. ($hearVoiceAlerts)                          : $extend
+    ($goMessagesPage)                           ..> ($answerAlerts)                             : $include
+    ($goMessagesPage)                           ..> ($goNotificationPageInDriveApp)             : $include
+        ($goNotificationPageInDriveApp)         ..> ($readUnseenNotifications)                  : $include
+        ($goNotificationPageInDriveApp)         ..> ($findNotifications)                        : $include
+}

@@ -1,0 +1,80 @@
+@startuml GeoTab_UseCaseDiagram
+title Диаграмма прецедентов GeoTab Дашборд
+
+left to right direction
+'===Акторы===========================================
+actor "Пользователь"    as user
+actor "Партнер"         as partner
+
+'===Отношения========================================
+!$include       = "Включает"
+!$extend        = "Расширяет"
+!$may           = "Может"
+
+'==Прецеденты========================================
+'-=Вкладка дашборда=-
+!$openDashboard                     = "Открыть вкладку Дашборды & Аналитика"
+    '-Встроенные отчеты-
+    !$goBuiltInReports              = "Перейти к встроенным отчетам"
+        !$viewBuiltInReports        = "Посмотреть встроенные отчеты"
+    '-Интерактивные графики-    
+    !$goInteractiveCharts           = "Перейти к интерактивным графикам"
+        !$viewInteractiveCharts     = "Посмотреть интерактивные графики"
+        !$loadInteractiveChart      = "Загрузить интерактивный график в формате pdf на свое устройство"
+        !$hideFromDashboard         = "Скрыть интерактивный график с дашборда"
+        !$goFullReport              = "Перейти к полному отчету"
+            !$editReport            = "Отредактировать отчет"
+            !$viewReportPage        = "Посмотреть страницу отчета"
+    '-Мои отчеты-          
+    !$goMyReports                   = "Перейти к вкладке  <<Мои отчеты>>"
+        !$loadReportsfromDB         = "Загрузить отчет из своей базы данных"
+        !$viewMyReports             = "Посмотреть загруженные отчеты"
+    '-=Дашборд wizard (Company Group access)=-
+    !$goDashboardWizard             = "Перейти в мастер настройки Дашборда"
+        !$crudxTemplates            = "CRUDX работа с шаблонами"
+        !$chooseComponent           = "Выбрать интересующий компонент"
+            !$viewReports           = "Посмотреть шаблоны, относящиеся к выбранному компоненту"
+            !$chooseReports         = "Выбрать шаблоны, относящиеся к выбранному компоненту"
+                !$manageAccess      = "Указать уровень доступа к отчетам"
+                    !$createRepot   = "Создать пользовательские отчеты"
+                
+
+
+'=======================================
+'===Связи===============================================================
+'=======================================
+'==Акторы==
+user <|-- partner
+
+
+'==Прецеденты==
+rectangle "Fleet Management Application"{
+    '-=Вкладка дашборда=-
+    :user:                              --> ($openDashboard)                : $may
+        '-Встроенные отчеты-
+        ($openDashboard)                ..> ($goBuiltInReports)             : $include
+            ($goBuiltInReports)         ..> ($viewBuiltInReports)           : $include
+        '-Интерактивные графики-   
+        ($openDashboard)                ..> ($goInteractiveCharts)          : $include
+            ($goInteractiveCharts)      ..> ($viewInteractiveCharts)        : $include
+            ($goInteractiveCharts)      ..> ($loadInteractiveChart)         : $include
+            ($goInteractiveCharts)      ..> ($hideFromDashboard)            : $include
+            ($goInteractiveCharts)      ..> ($goFullReport)                 : $include
+                ($goFullReport)         ..> ($viewReportPage)               : $include
+                ($goFullReport)         ..> ($editReport)                   : $include 
+        '-Мои отчеты-            
+        ($openDashboard)                ..> ($goMyReports)                  : $include
+            ($goMyReports)              ..> ($loadReportsfromDB)            : $include
+            ($goMyReports)              ..> ($viewMyReports)                : $include
+        '-=Дашборд wizard (Company Group access)=-
+        ($openDashboard)                <.. ($goDashboardWizard)            : $extend
+        :partner:                        --> ($goDashboardWizard)           : $may
+        ($goDashboardWizard)            ..> ($crudxTemplates)               : $include
+        ($goDashboardWizard)            ..> ($chooseComponent)              : $include
+            ($chooseComponent)          ..> ($viewReports)                  : $include
+            ($chooseComponent)          ..> ($chooseReports)                : $include
+                ($chooseReports)        ..> ($manageAccess)                 : $include
+                    ($manageAccess)     ..> ($createRepot)                  : $include
+}
+
+@enduml

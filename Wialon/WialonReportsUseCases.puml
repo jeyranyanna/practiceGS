@@ -1,0 +1,240 @@
+@startuml WialonReportsUseCases
+title Диаграмма прецедентов 'Отчеты' Wialon
+
+left to right direction
+'===Акторы===========================================
+actor "Пользователь"    as user
+
+'===Отношения========================================
+!$include       = "Включает"
+!$extend        = "Расширяет"
+!$may           = "Может"
+
+'==Прецеденты========================================
+'-=Вкладка Отчеты=-
+!$openReportsPage                       = "Открыть вкладку Отчеты"
+    '-Выполнение отчета-
+    !$createReport                      = "Выполнить отчет"
+        !$writeReportParams             = "Указать параметры отчета"
+            !$selectReportTemplate      = "Выбрать шаблон отчета"
+            !$selectElement             = "Выбрать элемент системы"
+                !$addElement            = "Добавить элемент системы"
+                !$changeElementSettings = "Редактировать свойства выбранного элемента"
+            !$writeTimePeriod           = "Указать временной интервал"
+                !$selectFastInterval    = "Выбрать один из доступных быстрых интервалов"
+                !$createInterval        = "Ввести интервал вручуню"
+
+    '-Просмотр выполненного отчета
+    !$goReportResultSection             = "Перейти к секции <<Результат отчета>>"       
+        !$readReportResult              = "Посмотреть результат содержимого отчета"
+            !$selectSystemComponent     = "Выбрать компонент отчета"
+                !$readReportComponent   = "Посмотреть компонент отчета"
+                    !$readTable         = "Посмотреть таблицу"
+                        !$readMapDotInfo    = "Перейти к просмотру информации о точке на карте"
+                    !$readGraph             = "Посмотреть график"
+                    !$readStatistics        = "Посмотреть статистику"
+            '-Печать отчета
+            !$printReport                       = "Распечатать отчет"
+                !$selectContentToPrint          = "Выбрать содержимое отчета для печати"
+            '-Экспорт отчета
+            !$exportReport                      = "Экспортировать результат выполнения отчета"
+                !$changeFileName                = "Изменить имя файла"
+                !$selectFileFormat              = "Выбрать формат файла"
+                !$setExportParams               = "Настроить параметры экспорта"
+
+    
+    '-Шаблон отчета- 
+    !$goReportsTemplatesSection         = "Перейти к секции <<Шаблоны отчетов>>"
+        !$readReportTemplateSettings    = "Просмотреть свойства шаблона отчета"
+        !$readReportTemplateInformation = "Посмотреть информацию о шаблоне отчета"
+        !$copyReportTemplate            = "Копировать шаблон отчета"
+        !$findReportTemplate            = "Выполнить поиск шаблона отчета"
+        !$updateReportTemplate          = "Редактировать шаблон отчета"
+        !$deleteReportTemplate          = "Удалить шаблон отчета"
+        '-Создание шаблона отчета-  
+        !$createReportTemplate          = "Создать шаблон отчета"
+            !$enterReportTemplateName   = "Ввести имя шаблона отчета"
+            !$selectReportTemplateType  = "Выбрать тип шаблона отчета"
+            '-Вкладка Содержимое отчета
+            !$goPageContent                                 = "Перейти на вкладку <<Содержимое>>"
+            '-Добавление содержимого отчета-
+                !$addReportContent                          = "Добавить содержимое отчета"
+                    '-Создание таблицы-
+                    !$createTable                           = "Создать новую таблицу"
+                        !$enterTableName                    = "Ввести имя таблицы"
+                        !$selectTableType                   = "Выбрать тип таблицы"
+                        !$goColumnsPage                     = "Перейти на вкладку <<Столбцы>>"
+                            !$selectColumns                 = "Выбрать столбцы таблицы"  
+                                !$changeColumnName          = "Изменить название столбца"
+                                !$changeColumnOrder         = "Изменить порядок столбцов в таблице"
+                            !$addCustomColumns              = "Добавить произвольные столбцы"
+                            !$findColumn                    = "Выполнить поиск столбцов"
+                        !$goSettingsPage                    = "Перейти на вкладку <<Настройки>>"
+                            !$goParametersSections          = "Перейти в раздел <<Параметры таблицы>>"
+                                !$setSorting                = "Добавить сортировку таблицы"
+                                !$setGrouping               = "Добавить группировку таблицы"
+                            !$goTableSettingsSection        = "Перейти в раздел <<Настройки таблицы>>"
+                                !$addDetalization           = "Добавить детализацию в отчет"
+                                !$addLineNumbering          = "Добавить нумерацию строк"
+                                !$addSummaryLine            = "Добавить итоговую строку"
+                                !$specifyTimeLimit          = "Указать ограничение по времени"
+                                !$addIncompleteInterval     = "Добавить отображение незавершенного интервала"
+                                !$selectDurationFormat      = "Выбрать формат отображения длительности"
+                            !$goFilteringSection            = "Перейти в раздел <<Фильтрация интервалов>>"
+                                !$readFilters               = "Посмотреть фильтры, доступные для таблицы"
+                                    !$applyFilters          = "Применить фильтры"
+                                    !$changeFiltersSequence = "Изменить последовательность применения фильтров"
+                    '-Создание графика (НЕ СДЕЛАНО)-
+                    !$createGraph           = "Создать новый график"
+                    '-Создание статистики-
+                    !$createStatistics      = "Создать новую статистику"
+                        !$selectColumns     = "Выбрать столбцы, которые необходимо включить в статистику"
+                        !$findColumns       = "Выполнить поиск столбцов"
+                        !$changeColumnName  = "Изменить название столбца таблицы"
+                        !$changeColumnOrder = "Изменить порядок столбцов"
+                '-Просмотр содержимого шаблона отчета-  
+                !$readReportTemplateContent = "Посмотреть содержимое шаблона отчета"
+                    !$DragComponent         = "Перетащить компонент вверх/вниз"
+                    !$updateComponent       = "Редактировать компонент "
+                    !$copyComponent         = "Копировать компонент"
+                    !$deleteComponent       = "Удалить компонент"
+
+            '-Вкладка Настройка отчета
+            !$goReportSettingsPage                   = "Перейти на вкладку <<Настройки отчета>>"
+                !$addReportTemplateDescription       = "Добавить описание шаблона отчета"
+                !$goGeneralSection                   = "Перейти в раздел <<Основное>>"
+                    !$setDateTimeFormat              = "Настроить формат даты и времени"
+                    !$selectMeasuresSystem           = "Выбрать систему мер"
+                    !$selectThousandSeparator        = "Выбрать разделитель групп разрядов"
+                !$addHeatMap                         = "Добавить к отчету тепловую карту"
+                !$selectMarkers                      = "Выбрать маркеры, котрые должны отображаться на карте"
+                    !$setFilters                     = "Настроить фильтрацию маркеров"
+                !$setAddressFormat                   = "Настроить формат отображения адреса"
+                !$setWorkShifts                      = "Настроить рабочие смены"
+                    !$crudxWorkShift                 = "CRUD рабочая смена"
+                    !$splitShiftsTransition          = "Включить опцию <<Разбивать смены с переходом суток>>"
+
+            '-Вкладка Привязка отчета
+            !$goElementBindingPage                   = "Перейти на вкладку <<Привязка элемента>>"
+                !$bindElementReportTemplate          = "Привязать элемент к шаблону отчета"
+                !$findElement                        = "Выполнить поиск элемента"
+        
+        
+        
+    
+'=======================================
+'===Связи===============================================================
+'=======================================
+
+rectangle "Wialon"{
+    '-=Вкладка Отчеты=-
+    :user:                                    --> ($openReportsPage)                  : $may
+        '-Выполнение отчета-
+        ($openReportsPage)                    ..> ($createReport)                     : $include
+            ($createReport)                   ..> ($writeReportParams)                : $include
+                ($writeReportParams)          ..> ($selectReportTemplate)             : $include
+                ($writeReportParams)          ..> ($selectElement)                    : $include
+                    ($addElement)               ..> ($selectElement)                  : $extend
+                    note right: Только для отчетов типа "Группа ..."
+                    ($selectElement)          ..> ($changeElementSettings)            : $include
+                ($writeReportParams)          ..> ($writeTimePeriod)                  : $include
+                    ($writeTimePeriod)          --> ($selectFastInterval)             : $may
+                    note right: Сегодня, Вчера, Месяц, Неделя
+                    ($writeTimePeriod)          --> ($createInterval)                 : $may
+                
+
+        '-Просмотр выполненного отчета
+        ($openReportsPage)                              ..> ($goReportResultSection)        : $include
+            ($goReportResultSection)                    ..> ($readReportResult)             : $include
+                ($readReportResult)                     ..> ($selectSystemComponent)        : $include
+                    ($selectSystemComponent)            ..> ($readReportComponent)          : $include
+                        ($readReportComponent)          ..> ($readTable)                    : $include
+                        ($readReportComponent)          ..> ($readGraph)                    : $include
+                        ($readReportComponent)          ..> ($readStatistics)               : $include
+                '-Печать отчета
+                ($goReportResultSection)                ..> ($printReport)                  : $include
+                    ($printReport)                      ..> ($selectContentToPrint)         : $include
+                '-Экспорт отчета
+                ($goReportResultSection)                ..> ($exportReport)                 : $include
+                    ($exportReport)                     ..> ($changeFileName)               : $include
+                    ($exportReport)                     ..> ($selectFileFormat)             : $include
+                    ($exportReport)                     ..> ($setExportParams)              : $include
+                    
+       
+
+        '-Шаблон отчета- 
+        ($openReportsPage)                        ..> ($goReportsTemplatesSection)          : $include
+            ($goReportsTemplatesSection)          ..> ($readReportTemplateSettings)         : $include
+            ($goReportsTemplatesSection)          ..> ($readReportTemplateInformation)      : $include
+            ($goReportsTemplatesSection)          ..> ($copyReportTemplate)                 : $include
+            ($goReportsTemplatesSection)          ..> ($findReportTemplate)                 : $include
+            ($goReportsTemplatesSection)          ..> ($updateReportTemplate)               : $include
+            ($goReportsTemplatesSection)          ..> ($deleteReportTemplate)               : $include
+            '-Создание шаблона отчета-  
+            ($goReportsTemplatesSection)          ..> ($createReportTemplate)               : $include
+                ($createReportTemplate)           ..> ($enterReportTemplateName)            : $include
+                ($createReportTemplate)           ..> ($selectReportTemplateType)           : $include
+                '-Вкладка Содержимое отчета
+                ($createReportTemplate)           ..> ($goPageContent)                      : $include
+                '-Добавление содержимого отчета-
+                    ($goPageContent)              ..> ($addReportContent)                   : $include
+                        '-Создание таблицы-
+                        ($addReportContent)                     --> ($createTable)                     : $may
+                            ($createTable)                      ..> ($enterTableName)                  : $include
+                            ($createTable)                      ..> ($selectTableType)                 : $include
+                            ($createTable)                      ..> ($goColumnsPage)                   : $include
+                                ($goColumnsPage)                ..> ($selectColumns)                   : $include
+                                    ($selectColumns)            ..> ($changeColumnName)                : $include
+                                    ($selectColumns)            ..> ($changeColumnOrder)               : $include
+                                ($goColumnsPage)                ..> ($addCustomColumns)                : $include
+                                ($goColumnsPage)                ..> ($findColumn)                      : $include
+                            ($createTable)                      ..> ($goSettingsPage)                  : $include
+                                ($goSettingsPage)               ..> ($goParametersSections)            : $include
+                                    ($goParametersSections)     ..> ($setSorting)                      : $include
+                                    ($goParametersSections)     ..> ($setGrouping)                     : $include
+                                ($goSettingsPage)               ..> ($goTableSettingsSection)          : $include
+                                    ($goTableSettingsSection)           ..> ($addDetalization)         : $include
+                                    ($goTableSettingsSection)           ..> ($addLineNumbering)        : $include
+                                    ($goTableSettingsSection)           ..> ($addSummaryLine)          : $include
+                                    ($goTableSettingsSection)           ..> ($specifyTimeLimit)        : $include
+                                    ($goTableSettingsSection)           ..> ($addIncompleteInterval)   : $include
+                                    ($goTableSettingsSection)           ..> ($selectDurationFormat)    : $include
+                                ($goSettingsPage)                ..> ($goFilteringSection)             : $include
+                                    ($goFilteringSection)        ..> ($readFilters)                    : $include
+                                        ($readFilters)           ..> ($applyFilters)                   : $include
+                                        ($readFilters)           ..> ($changeFiltersSequence)          : $include
+    
+                        '-Создание графика (НЕ СДЕЛАНО)-
+                        ($addReportContent)                     --> ($createGraph)                     : $may
+                        '-Создание статистики-
+                        ($addReportContent)                     --> ($createStatistics)                : $may
+                            ($createStatistics)                 ..> ($selectColumns)                   : $include
+                            ($createStatistics)                 ..> ($findColumns)                     : $include
+                    
+                    '-Просмотр содержимого шаблона отчета- 
+                    ($goPageContent)                        ..> ($readReportTemplateContent)       : $include
+                        ($readReportTemplateContent)        ..> ($DragComponent)                   : $include
+                        ($readReportTemplateContent)        ..> ($updateComponent)                 : $include
+                        ($readReportTemplateContent)        ..> ($copyComponent)                   : $include
+                        ($readReportTemplateContent)        ..> ($deleteComponent)                 : $include
+
+                '-Вкладка Настройка отчета
+                ($createReportTemplate)               ..> ($goReportSettingsPage)                   : $include
+                    ($goReportSettingsPage)           ..> ($addReportTemplateDescription)           : $include
+                    ($goReportSettingsPage)           ..> ($goGeneralSection)                       : $include
+                        ($goGeneralSection)           ..> ($setDateTimeFormat)                      : $include
+                        ($goGeneralSection)           ..> ($selectMeasuresSystem)                   : $include
+                        ($goGeneralSection)           ..> ($selectThousandSeparator)                : $include
+                    ($goReportSettingsPage)           ..> ($addHeatMap)                             : $include
+                    ($goReportSettingsPage)           ..> ($selectMarkers)                          : $include
+                        ($selectMarkers)              ..> ($setFilters)                             : $include
+                    ($goReportSettingsPage)           ..> ($setAddressFormat)                       : $include
+                    ($goReportSettingsPage)           ..> ($setWorkShifts)                          : $include
+                        ($setWorkShifts)              ..> ($crudxWorkShift)                         : $include
+                        ($setWorkShifts)              ..> ($splitShiftsTransition)                  : $include
+
+                '-Вкладка Привязка отчета
+                ($createReportTemplate)           ..> ($goElementBindingPage)                       : $include
+                    ($goElementBindingPage)           ..> ($bindElementReportTemplate)              : $include
+                    ($goElementBindingPage)           ..> ($findElement)                            : $include
+@enduml
